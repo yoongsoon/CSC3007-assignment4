@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style></style>
+
+   <!-- bootstrap-->
+  <link rel="stylesheet"  type="text/css" href="css/bootstrap.min.css">
+
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="row-lg-3">
+          <h4 class="text-center display-6">Covid Case Clusters</h4>
+        <div class="text-center">
+            <div class="btn-group py-1" role="group" aria-label="">
+
+              <input type="radio" class="btn-check" name="btnradio" id="genderSelect" autocomplete="off">
+              <label class="btn btn-outline-secondary btn-sm" for="genderSelect">Gender</label>
+    
+              <input type="radio" class="btn-check" name="btnradio" id="ageSelect" autocomplete="off">
+              <label class="btn btn-outline-secondary btn-sm" for="ageSelect">Age</label>
+
+              <input type="radio" class="btn-check" name="btnradio" id="vaccinatedSelect" autocomplete="off">
+              <label class="btn btn-outline-secondary btn-sm" for="vaccinatedSelect">Vaccinated</label>
+            </div>  
+        </div>
+
+        <div>
+        </div>
+    </div>
+      <div class="row-lg-9">
+          <div id="graph"></div>
+      </div>
+    </div>
+  </div>
+
+
+<!--load D3-->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+<!--load javascript --->
+<script type="text/javascript" src="source.js" ></script>
+
+</body>
+</html>
+          
