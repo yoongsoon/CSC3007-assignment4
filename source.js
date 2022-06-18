@@ -5,7 +5,7 @@ let svg = d3.select("#graph").append("svg")
     .attr("viewBox", "0 0 " + width + " " + height)
 
 // Background
-  svg.append("rect")
+ let rectBackGround = svg.append("rect")
   .attr("class", "rect-background")
   .attr("x", 0)
   .attr("y", 0)
@@ -42,7 +42,6 @@ const tooltip = d3.select("body")
 .style("border-width", "1px")
 .style("border-radius", "5px")
 .style("padding", "10px");
-
 
 let graph = svg.append("g").attr("id", "graph");
 
@@ -177,14 +176,17 @@ function tick() {
 
 // For updating the graph
 d3.select("#genderSelect").on("click", (event,d)=> {
+  create_legend("gender");
   updateSelection("gender");
 });
 
 d3.select("#ageSelect").on("click", (event,d)=> {
+  create_legend("age");
   updateSelection("age");
 });
 
 d3.select("#vaccinatedSelect").on("click", (event,d)=> {
+  create_legend("vaccinated");
   updateSelection("vaccinated");
 });
 
@@ -201,6 +203,81 @@ function updateSelection(category) {
         }
     });
 }
+
+//--------Legends-------------------//
+const legend_start_x = 30;
+const legend_start_y = 20;
+const legend_y_offset = 30;
+const legend_text_offset = 20;
+const legend_limit = 9;
+
+let start_x = legend_start_x;
+let start_y = legend_start_y;
+
+let group_for_legend = svg.append("g")
+                  .attr("id", "legend");
+
+for (let i = 0; i < legend_limit; i++) {
+  let current_legend = group_for_legend.append("g")
+  .attr("id", "legend "  + i);
+
+  current_legend.append("circle").attr("class", "legend_circle_" + i ).attr("cx", start_x).attr("cy",start_y).attr("r", 6).style("visibility", "hidden");
+  current_legend.append("text").attr("class", "legend_text_" + i ).attr("x", start_x + legend_text_offset).attr("y", start_y).style("font-size", "15px").attr("alignment-baseline","middle").style("visibility", "hidden");
+  start_y += legend_y_offset;
+}
+
+function clear_legend(){
+  for (let i = 0; i < legend_limit; i++) {
+    d3.select(".legend_circle_" + i).style("visibility", "hidden");
+    d3.select(".legend_text_" + i).style("visibility", "hidden");
+  }
+}
+
+function create_legend(category){
+
+  let index = 0;
+
+    if (category == "gender") {
+
+      clear_legend();
+      for (const [key, value] of Object.entries(genderScale)) {
+        d3.select(".legend_circle_" + index).style("fill",  value).style("visibility", "visible");
+        d3.select(".legend_text_" + index).text(key).style("visibility", "visible");
+        index += 1;
+      }
+ 
+  } else if (category == "age") {
+
+    clear_legend();
+
+    let start_age = 0;
+    const age_offset = 9;
+
+    for (let i = 0; i < legend_limit; i++) {
+      d3.select(".legend_circle_" + i).style("fill",  ageScale(start_age)).style("visibility", "visible");
+      d3.select(".legend_text_" + i).text(start_age + " to " +  (start_age + age_offset) + " years old").style("visibility", "visible");
+      
+      start_age = (start_age + 1 + age_offset);
+    }
+
+  } else if (category == "vaccinated") {
+
+      clear_legend();
+
+      d3.select(".legend_circle_" + 0).style("fill",  colors[6]).style("visibility", "visible");
+      d3.select(".legend_text_" + 0).text("no").style("visibility", "visible");
+
+      d3.select(".legend_circle_" + 1).style("fill",  colors[8]).style("visibility", "visible");
+      d3.select(".legend_text_" + 1).text("partial (1 dose)").style("visibility", "visible");
+
+      d3.select(".legend_circle_" + 2).style("fill",  colors[9]).style("visibility", "visible");
+      d3.select(".legend_text_" + 2).text("yes (2 doses)").style("visibility", "visible"); 
+  }
+
+}
+
+//Create default legend  
+create_legend("gender");
 
 // console.log(data[0]); // links
 // console.log(data[1]); // cases
